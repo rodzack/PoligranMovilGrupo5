@@ -1,91 +1,98 @@
 package com.example.proyectopoli.screens
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberDrawerState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.proyectopoli.navigation.ContentNavigation
-import com.example.proyectopoli.screens.fragments.content.menu.MenuFragment
-import kotlinx.coroutines.launch
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.proyectopoli.screens.fragments.content.PerfilFragment
+import com.example.proyectopoli.screens.fragments.content.BotonesFragment
+import com.example.proyectopoli.screens.fragments.content.FotosFragment
+import com.example.proyectopoli.screens.fragments.content.VideosFragment
+import com.example.proyectopoli.screens.fragments.content.WebFragment
+import com.example.proyectopoli.ui.theme.ProyectoPOLITheme
+import androidx.compose.ui.tooling.preview.Preview
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
-    var selectedOption by remember { mutableStateOf("perfil") }
+    var selectedScreen by remember { mutableStateOf("Perfil") }
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                MenuFragment(
-                    selectedOption = selectedOption,
-                    onOptionSelected = { option ->
-                        selectedOption = option
-                        scope.launch {
-                            drawerState.close()
-                        }
-                    }
-                )
+    Row(modifier = Modifier.fillMaxSize()) {
+        // Menú lateral
+        DrawerContent(
+            onItemSelected = { selectedScreen = it },
+            selectedScreen = selectedScreen
+        )
+
+        // Contenido principal
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(16.dp),
+            contentAlignment = Alignment.TopStart
+        ) {
+            when (selectedScreen) {
+                "Perfil" -> PerfilFragment()
+                "Fotos" -> FotosFragment()
+                "Video" -> VideosFragment()
+                "Web" -> WebFragment()
+                "Botones" -> BotonesFragment()
             }
         }
+    }
+}
+
+@Composable
+fun DrawerContent(onItemSelected: (String) -> Unit, selectedScreen: String) {
+    val items = listOf("Perfil", "Fotos", "Video", "Web", "Botones")
+
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .width(180.dp)
+            .background(Color(0xFF263238))
+            .padding(8.dp)
     ) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text("ProyectoPOLI") },
-                    navigationIcon = {
-                        IconButton(onClick = {
-                            scope.launch {
-                                if (drawerState.isClosed) {
-                                    drawerState.open()
-                                } else {
-                                    drawerState.close()
-                                }
-                            }
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Menu,
-                                contentDescription = "Menu"
-                            )
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                )
-            }
-        ) { paddingValues ->
-            Surface(
+        Text(
+            text = "Marvel",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            modifier = Modifier.padding(12.dp)
+        )
+
+        items.forEach { item ->
+            val isSelected = item == selectedScreen
+            Text(
+                text = item,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = if (isSelected) Color.Black else Color.White,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                color = MaterialTheme.colorScheme.background
-            ) {
-                ContentNavigation(selectedOption = selectedOption)
-            }
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .background(if (isSelected) Color(0xFF00E676) else Color.Transparent, RoundedCornerShape(8.dp))
+                    .clickable { onItemSelected(item) }
+                    .padding(8.dp)
+            )
         }
+    }
+}
+
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun HomeScreenPreview() {
+    ProyectoPOLITheme {
+        HomeScreen()
     }
 }
