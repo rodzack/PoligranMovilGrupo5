@@ -1,10 +1,9 @@
 package com.example.proyectopoli.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,26 +11,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyectopoli.screens.fragments.content.PerfilFragment
-import com.example.proyectopoli.screens.fragments.content.BotonesFragment
-import com.example.proyectopoli.screens.fragments.content.FotosFragment
-import com.example.proyectopoli.screens.fragments.content.VideosFragment
-import com.example.proyectopoli.screens.fragments.content.WebFragment
-import com.example.proyectopoli.ui.theme.ProyectoPOLITheme
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.proyectopoli.screens.fragments.content.*
+import com.example.proyectopoli.ui.components.MenuFragment
+import com.example.proyectopoli.ui.theme.ProyectoPOLITheme
 
 @Composable
 fun HomeScreen() {
-    var selectedScreen by remember { mutableStateOf("Perfil") }
+    var selectedScreen by remember { mutableStateOf("Inicio") }
 
     Row(modifier = Modifier.fillMaxSize()) {
-        // Menú lateral
-        DrawerContent(
+        MenuFragment(
             onItemSelected = { selectedScreen = it },
             selectedScreen = selectedScreen
         )
 
-        // Contenido principal
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -46,50 +40,69 @@ fun HomeScreen() {
                 "Video" -> VideosFragment()
                 "Web" -> WebFragment()
                 "Botones" -> BotonesFragment()
+                else -> HomeContent()
             }
         }
     }
 }
 
 @Composable
-fun DrawerContent(onItemSelected: (String) -> Unit, selectedScreen: String) {
-    val items = listOf("Perfil", "Fotos", "Video", "Web", "Botones")
-
+fun HomeContent() {
     Column(
         modifier = Modifier
-            .fillMaxHeight()
-            .width(180.dp)
-            .background(Color(0xFF263238))
-            .padding(8.dp)
+            .fillMaxSize()
+            .padding(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Marvel",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.padding(12.dp)
+            text = "🍲",
+            fontSize = 64.sp
         )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Subgrupo 5",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Bienvenido a la app de recetas.",
+            fontSize = 16.sp,
+            color = Color.DarkGray,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+        Spacer(modifier = Modifier.height(24.dp))
 
-        items.forEach { item ->
-            val isSelected = item == selectedScreen
+        // Lista de integrantes
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.Start
+        ) {
             Text(
-                text = item,
-                fontSize = 16.sp,
+                text = "Integrantes:",
                 fontWeight = FontWeight.Bold,
-                color = if (isSelected) Color.Black else Color.White,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .background(if (isSelected) Color(0xFF00E676) else Color.Transparent, RoundedCornerShape(8.dp))
-                    .clickable { onItemSelected(item) }
-                    .padding(8.dp)
+                fontSize = 18.sp,
+                modifier = Modifier.padding(bottom = 8.dp)
             )
+            val integrantes = listOf(
+                "Luisa Milena Diaz Burgos",
+                "María Fernanda Diaz Burgos",
+                "Juan Diego Escobar Londoño",
+                "Luis David Martinez Blanco"
+            )
+            integrantes.forEach { nombre ->
+                Text(
+                    text = "🧑‍🍳 $nombre",
+                    fontSize = 16.sp,
+                    color = Color.DarkGray,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+            }
         }
     }
 }
 
-
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     ProyectoPOLITheme {
