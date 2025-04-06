@@ -1,64 +1,68 @@
-package com.example.proyectopoli.screens.fragments.content.menu
+package com.example.proyectopoli.ui.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.RadioButtonChecked
-import androidx.compose.material.icons.filled.Videocam
-import androidx.compose.material3.Divider
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.proyectopoli.model.MenuItem
-import com.example.proyectopoli.ui.theme.components.DrawerItem
+import androidx.compose.ui.unit.sp
+import com.example.proyectopoli.screens.fragments.content.BotonesFragment
+import com.example.proyectopoli.ui.theme.ProyectoPOLITheme
 
 @Composable
-fun MenuFragment(
-    selectedOption: String,
-    onOptionSelected: (String) -> Unit
-) {
-    val menuItems = listOf(
-        MenuItem(id = "perfil", title = "Perfil", icon = Icons.Default.AccountCircle),
-        MenuItem(id = "fotos", title = "Fotos", icon = Icons.Default.Image),
-        MenuItem(id = "videos", title = "Videos", icon = Icons.Default.Videocam),
-        MenuItem(id = "web", title = "Web", icon = Icons.Default.Language),
-        MenuItem(id = "botones", title = "Botones", icon = Icons.Default.RadioButtonChecked)
-    )
+fun MenuFragment(onItemSelected: (String) -> Unit, selectedScreen: String) {
+    val items = listOf("Perfil", "Fotos", "Video", "Web", "Botones")
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxHeight()
+            .width(135.dp)
+            .background(Color(0xFF263238))
+            .padding(8.dp)
     ) {
         Text(
-            text = "ProyectoPOLI",
-            style = MaterialTheme.typography.titleLarge,
+            text = "Recetas",
+            fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 24.dp)
+            color = Color.White,
+            modifier = Modifier.padding(12.dp).clickable { onItemSelected("Home") }
+
         )
 
-        Divider()
-
-        LazyColumn {
-            items(menuItems) { item ->
-                DrawerItem(
-                    item = item,
-                    selected = selectedOption == item.id,
-                    onItemClick = { onOptionSelected(item.id) }
-                )
-            }
+        items.forEach { item ->
+            val isSelected = item == selectedScreen
+            Text(
+                text = item,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = if (isSelected) Color.Black else Color.White,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .background(
+                        if (isSelected) Color(0xFF00E676) else Color.Transparent,
+                        RoundedCornerShape(8.dp)
+                    )
+                    .clickable { onItemSelected(item) }
+                    .padding(8.dp)
+            )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MenuFragmentPreview() {
+    ProyectoPOLITheme {
+        MenuFragment(
+            onItemSelected = { },
+            selectedScreen = "Home"
+        )
     }
 }

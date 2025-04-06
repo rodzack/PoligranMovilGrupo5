@@ -10,28 +10,36 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import com.example.proyectopoli.ui.theme.ProyectoPOLITheme
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.proyectopoli.ui.components.MenuFragment
 
 @Composable
 fun BotonesFragment() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.Start
-    ) {
-        Text(
-            text = "Botones",
-            fontSize = 26.sp,
-            fontWeight = FontWeight.Bold
+    Row(modifier = Modifier.fillMaxSize()) {
+
+        MenuFragment(
+            onItemSelected = { },
+            selectedScreen = "Botones"
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "En el fragmento de Fotos están disponibles dos botones:",
-            fontSize = 16.sp
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        BotonOpcion(icon = "🔗", texto = "Compartir")
-        BotonOpcion(icon = "⭐", texto = "Añadir a favoritos")
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = "Botones",
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "En el fragmento de Fotos están disponibles dos botones:",
+                fontSize = 16.sp
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            BotonOpcion(icon = "🔗", texto = "Compartir")
+            BotonOpcion(icon = "⭐", texto = "Añadir a favoritos")
+        }
     }
 }
 
