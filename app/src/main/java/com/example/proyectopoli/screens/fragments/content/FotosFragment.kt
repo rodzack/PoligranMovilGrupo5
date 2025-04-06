@@ -1,7 +1,6 @@
 package com.example.proyectopoli.screens.fragments.content
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.proyectopoli.R
-import com.example.proyectopoli.ui.components.MenuFragment
 import com.example.proyectopoli.ui.theme.ProyectoPOLITheme
 
 data class Receta(
@@ -51,7 +49,6 @@ fun FotosFragment() {
     )
 
     Row(modifier = Modifier.fillMaxSize()) {
-        MenuFragment(onItemSelected = {}, selectedScreen = "Fotos")
 
         Column(
             modifier = Modifier

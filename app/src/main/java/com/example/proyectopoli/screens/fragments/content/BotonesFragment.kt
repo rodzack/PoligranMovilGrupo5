@@ -10,16 +10,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import com.example.proyectopoli.ui.theme.ProyectoPOLITheme
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.proyectopoli.ui.components.MenuFragment
 
 @Composable
 fun BotonesFragment() {
     Row(modifier = Modifier.fillMaxSize()) {
 
-        MenuFragment(
-            onItemSelected = { },
-            selectedScreen = "Botones"
-        )
         Column(
             modifier = Modifier
                 .fillMaxSize()

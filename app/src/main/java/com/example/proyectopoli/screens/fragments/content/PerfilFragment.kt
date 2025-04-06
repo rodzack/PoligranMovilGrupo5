@@ -15,17 +15,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.proyectopoli.ui.components.MenuFragment
 import com.example.proyectopoli.ui.theme.ProyectoPOLITheme
 
 @Composable
 fun PerfilFragment() {
     Row(modifier = Modifier.fillMaxSize()) {
 
-        MenuFragment(
-            onItemSelected = { },
-            selectedScreen = "Perfil"
-        )
 
         Column(
             modifier = Modifier
