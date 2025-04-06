@@ -93,7 +93,7 @@ fun DietPreferencesCard() {
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = "150 Recetas favoritas", fontSize = 14.sp, fontWeight = FontWeight.Bold)
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(18.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -102,13 +102,13 @@ fun DietPreferencesCard() {
                 DietPreferenceIndicator(Color.Gray, "80", "Vegano")
                 DietPreferenceIndicator(Color.LightGray, "32", "Vegetariano")
             }
-
+            Spacer(modifier = Modifier.height(18.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 DietPreferenceIndicator(Color.Gray, "24", "Sin gluten")
-                DietPreferenceIndicator(Color.LightGray, "14", "Baja en carbohidratos")
+                DietPreferenceIndicator(Color.LightGray, "14", "Baja en grasas")
             }
         }
     }
@@ -165,7 +165,7 @@ fun AllergyItem(text: String) {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true)
 @Composable
 fun PerfilFragmentPreview() {
     ProyectoPOLITheme {

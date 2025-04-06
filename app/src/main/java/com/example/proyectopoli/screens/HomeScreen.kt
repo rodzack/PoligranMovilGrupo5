@@ -66,15 +66,43 @@ fun HomeContent() {
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Bienvenido a la app de recetas más sabrosa. Explora platos únicos, guarda tus favoritos y descubre tus preferencias alimenticias.",
+            text = "Bienvenido a la app de recetas.",
             fontSize = 16.sp,
             color = Color.DarkGray,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Lista de integrantes
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = "Integrantes:",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            val integrantes = listOf(
+                "Luisa Milena Diaz Burgos",
+                "María Fernanda Diaz Burgos",
+                "Juan Diego Escobar Londoño",
+                "Luis David Martinez Blanco"
+            )
+            integrantes.forEach { nombre ->
+                Text(
+                    text = "🧑‍🍳 $nombre",
+                    fontSize = 16.sp,
+                    color = Color.DarkGray,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+            }
+        }
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     ProyectoPOLITheme {
