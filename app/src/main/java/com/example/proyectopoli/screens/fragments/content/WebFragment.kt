@@ -1,71 +1,100 @@
 package com.example.proyectopoli.screens.fragments.content
 
-import android.graphics.Bitmap
-import android.util.Log
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun WebFragment() {
     var text by remember { mutableStateOf(TextFieldValue("https://www.google.com")) }
-    var urlToLoad by remember { mutableStateOf("https://www.google.com") }
-    val context = LocalContext.current
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            OutlinedTextField(
-                value = text,
-                onValueChange = { text = it },
-                label = { Text("Ingrese la URL") },
-                modifier = Modifier.fillMaxWidth()
-            )
+        OutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text("Ingrese la URL") },
+            modifier = Modifier.fillMaxWidth()
+        )
 
-            Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-            Button(
-                onClick = {
-                    urlToLoad = if (text.text.startsWith("https://")) {
-                        text.text.trim()
-                    } else {
-                        "https://${text.text.trim().replace("http", "")}"
-                    }
-                },
-                modifier = Modifier.align(Alignment.End)
-            ) {
-                Text("Cargar")
-            }
+        var url by remember { mutableStateOf("https://www.google.com") }
 
-            Divider(
-                thickness = 5.dp,
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-            )
+        Button(
+            onClick = {
+                url = if (text.text.startsWith("https://")) {
+                    text.text.trim()
+                } else {
+                    "https://${text.text.trim().replace("http://", "")}"
+                }
+            },
+            modifier = Modifier.align(Alignment.End)
+        ) {
+            Text("Cargar")
+        }
 
-            AndroidView(
-                factory = {
-                    WebView(context).apply {}
-                },
-                update = { webView ->
-                    if (urlToLoad.isNotEmpty()) {
-                        webView.loadUrl(urlToLoad)
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            )
+        Divider(modifier = Modifier.padding(vertical = 16.dp))
+        
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(600.dp)
+                .background(Color.LightGray)
+        ) {
+            ComponentWebView(url = url)
+        }
+    }
+}
+
+@Composable
+fun ComponentWebView(url: String) {
+    val webViewRef = remember { mutableStateOf<WebView?>(null) }
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        AndroidView(
+            factory = { ctx ->
+                WebView(ctx).apply {
+                    layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    )
+                    webViewClient = WebViewClient()
+
+                    setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+
+                    isFocusable = false
+                    isFocusableInTouchMode = false
+
+                    webViewRef.value = this
+                }
+            },
+            modifier = Modifier.fillMaxSize()
+        )
+
+        LaunchedEffect(url) {
+            delay(100) 
+            webViewRef.value?.loadUrl(url)
         }
     }
 }
