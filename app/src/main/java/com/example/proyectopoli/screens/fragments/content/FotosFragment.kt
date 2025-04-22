@@ -21,11 +21,19 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.proyectopoli.R
 import com.example.proyectopoli.ui.theme.ProyectoPOLITheme
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.BorderStroke
+import androidx.core.net.toUri
+
 
 data class Receta(
     val nombre: String,
     val ingredientes: List<String>,
-    val imagenResId: Int
+    val imagenResId: Int,
+    val url: String
 )
 
 @Composable
@@ -33,18 +41,21 @@ fun FotosFragment() {
     val recetas = listOf(
         Receta(
             nombre = "Ensalada fresca",
-            ingredientes = listOf("Lechuga", "Tomate", "Pepino", "Aceite de oliva", "Limón"),
-            imagenResId = R.drawable.ensalada
+            ingredientes = listOf("Langostino", "Lechuga", "Tomate", "Vinagre", "Aceite de oliva", "Naranja", "Aguacate", "Sal y pimienta"),
+            imagenResId = R.drawable.ensalada,
+            url = "https://jetextramar.com/recetas/ensalada-fresca-de-langostinos/"
         ),
         Receta(
             nombre = "Pollo al horno",
-            ingredientes = listOf("Pechuga de pollo", "Papas", "Romero", "Sal", "Ajo", "Aceite"),
-            imagenResId = R.drawable.pollo
+            ingredientes = listOf("Pollo", "Papas", "Romero", "Sal", "Ajo", "Aceite de oliva", "Cebolla"),
+            imagenResId = R.drawable.pollo,
+            url = "https://cocina-casera.com/pollo-asado-al-horno-con-patatas-y-cebolla/"
         ),
         Receta(
             nombre = "Tarta de frutas",
             ingredientes = listOf("Fresas", "Kiwi", "Durazno", "Masa de tarta", "Crema pastelera"),
-            imagenResId = R.drawable.tarta
+            imagenResId = R.drawable.tarta,
+            url = "https://lomaculinaria.com/tarta-de-frutas-frescas/"
         )
     )
 
@@ -71,15 +82,22 @@ fun FotosFragment() {
         }
     }
 }
+
 @Composable
 fun RecetaCard(receta: Receta) {
+    var esFavorito by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF1F8E9)),
+        colors = CardDefaults.cardColors(
+            containerColor = if (esFavorito) Color(0xFFFFEBEE) else Color(0xFFF1F8E9)
+        ),
         elevation = CardDefaults.cardElevation(4.dp),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        border = if (esFavorito) BorderStroke(2.dp, Color.Red) else null
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
@@ -88,7 +106,6 @@ fun RecetaCard(receta: Receta) {
                     .padding(bottom = 12.dp),
                 verticalAlignment = Alignment.Top
             ) {
-                // Imagen a la izquierda
                 Image(
                     painter = painterResource(id = receta.imagenResId),
                     contentDescription = receta.nombre,
@@ -99,7 +116,6 @@ fun RecetaCard(receta: Receta) {
 
                 Spacer(modifier = Modifier.width(12.dp))
 
-                // Íconos alineados arriba a la derecha de la imagen
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -107,30 +123,41 @@ fun RecetaCard(receta: Receta) {
                     horizontalArrangement = Arrangement.End
                 ) {
                     IconButton(
-                        onClick = { /* Compartir */ },
+                        onClick = {
+                            val mensaje = "¡Mira esta receta deliciosa! 🍽️\n\n" +
+                                    "Nombre: ${receta.nombre}\n" +
+                                    "Ingredientes: ${receta.ingredientes.joinToString(", ")}\n" +
+                                    "Receta completa: ${receta.url}\n"
+                            val intent = Intent(Intent.ACTION_VIEW)
+                            intent.data = "https://api.whatsapp.com/send?text=${Uri.encode(mensaje)}".toUri()
+                            context.startActivity(intent)
+                        },
                         modifier = Modifier.size(32.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Share,
                             contentDescription = "Compartir",
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(20.dp),
+                            tint = Color(0xFF388E3C)
                         )
                     }
 
                     IconButton(
-                        onClick = { /* Favorito */ },
+                        onClick = {
+                            esFavorito = !esFavorito
+                        },
                         modifier = Modifier.size(32.dp)
                     ) {
                         Icon(
-                            imageVector = Icons.Default.FavoriteBorder,
+                            imageVector = if (esFavorito) Icons.Filled.FavoriteBorder else Icons.Filled.FavoriteBorder,
                             contentDescription = "Favorito",
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(20.dp),
+                            tint = if (esFavorito) Color.Red else Color.Gray
                         )
                     }
                 }
             }
 
-            // Nombre
             Text(
                 text = receta.nombre,
                 fontWeight = FontWeight.Bold,
@@ -140,7 +167,6 @@ fun RecetaCard(receta: Receta) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Ingredientes
             Column {
                 receta.ingredientes.forEach { ingrediente ->
                     Text(
@@ -153,6 +179,7 @@ fun RecetaCard(receta: Receta) {
         }
     }
 }
+
 
 
 @Preview(showBackground = true)
