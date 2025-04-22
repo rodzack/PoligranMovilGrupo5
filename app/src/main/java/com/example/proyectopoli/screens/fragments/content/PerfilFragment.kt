@@ -1,11 +1,9 @@
-
-
-
 package com.example.proyectopoli.screens.fragments.content
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,12 +17,14 @@ import com.example.proyectopoli.ui.theme.ProyectoPOLITheme
 
 @Composable
 fun PerfilFragment() {
+    val scrollState = rememberScrollState()
     Row(modifier = Modifier.fillMaxSize()) {
 
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(scrollState)
                 .padding(16.dp),
             horizontalAlignment = Alignment.Start
         ) {
@@ -153,7 +153,7 @@ fun AllergyItem(text: String) {
     ) {
         Checkbox(
             checked = true,
-            onCheckedChange = null // <- importante para que funcione en Preview
+            onCheckedChange = null
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(text = text, fontSize = 16.sp)
