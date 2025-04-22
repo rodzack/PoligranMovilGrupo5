@@ -1,7 +1,8 @@
 package com.example.proyectopoli.screens
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState 
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -48,9 +49,11 @@ fun HomeScreen() {
 
 @Composable
 fun HomeContent() {
+    val scrollState = rememberScrollState()   
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState) 
             .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
