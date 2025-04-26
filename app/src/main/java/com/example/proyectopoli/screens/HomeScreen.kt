@@ -91,8 +91,7 @@ fun HomeContent() {
             val integrantes = listOf(
                 "Luisa Milena Diaz Burgos",
                 "María Fernanda Diaz Burgos",
-                "Juan Diego Escobar Londoño",
-                "Luis David Martinez Blanco"
+                "Juan Diego Escobar Londoño"
             )
             integrantes.forEach { nombre ->
                 Text(
